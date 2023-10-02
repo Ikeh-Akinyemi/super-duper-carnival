@@ -6,33 +6,38 @@ fn main() {
 
 #[component]
 fn App(cx: Scope) -> impl IntoView {
-    let (count, set_count) = create_signal(cx, 0);
-    let (x, set_x) = create_signal(cx, 0);
-    let (y, set_y) = create_signal(cx, 0);
-
-    let double_count = move || count() * 2;
-
     view! { cx,
-        <div
-        style="position: absolute"
-        style:left=move || format!("{}px", x() + 100)
-        style:top=move || format!("{}px", y() + 100)
-        style:background-color=move || format!("rgb({}, {}, 150)", x(), y())
-        style=("--column", x)
-        >
-            <p>"Move when coordinates change"</p>
-            <button
-                class:red=move || count() % 2 == 1
-                on:click=move|_| {
-                    set_count.update(|n| *n += 1);
-                }
-            > 
-                "Click me: "
-                {count}
-            </button>
-            <progress max="50" value=count />
-            <progress max="50" value=double_count />
-            <p> "Double Count: " {double_count} </p>
-        </div>
+        <body>
+            <div class="container">
+                <header>
+                    <h1 id="branding">"ProcKiller"</h1>
+                </header>
+                <div class="main">
+                    <div class="process-info">
+                        <div class="process-count">
+                            <h2>"Number of Processes: "<span id="process-count">0</span></h2>
+                        </div>
+                        <div class="filter">
+                            <input type="text" id="filter-input" placeholder="Filter by name" />
+                        </div>
+                        <div class="port-search">
+                            <input type="text" id="port-input" placeholder="Find by port number" />
+                            <button id="port-search-button">"Search"</button>
+                        </div>
+                    </div>
+                    <div class="process-list">
+                        <header>
+                            <div class="header-item">"Select"</div>
+                            <div class="header-item">"Name"</div>
+                            <div class="header-item">"PID"</div>
+                            <div class="header-item">"Parent PID"</div>
+                        </header>
+                    </div>
+                    <div class="actions">
+                        <button class="kill-button" id="kill-button">"Kill Selected Process"</button>
+                    </div>
+                </div>
+            </div>
+        </body>
     }
 }
